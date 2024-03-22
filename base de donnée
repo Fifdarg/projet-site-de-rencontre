@@ -22,6 +22,23 @@ CREATE TABLE utilisateurs (
     genre TEXT,
     bio TEXT,
     photo_profil TEXT
+    question 1 : Quelle est la chose la plus embarrassante que tu aies jamais faite?
+    question 2 : Quel est ton mouvement de danse préféré quand personne ne te regarde ?
+    question 3 : Quelle est l'habitude dont tu veux te défaire et pourquoi ?
+    question 4 :Si tu étais un légume, quel légume serais-tu et pourquoi ?
+
+
+
+**Si tu pouvais collaborer avec un artiste, mort ou vivant, qui serait-il et que créeriez-vous ensemble ? **
+
+Quel est l'objectif que tu veux atteindre au cours de l'année à venir et quelles sont les mesures que tu prends pour y parvenir?
+
+
+
+**Quel est le petit acte de gentillesse que tu as fait récemment et comment t'es-tu senti ?
+
+**Quelle est ta forme d'expression artistique préférée (par exemple, la peinture, l'écriture, la photographie) et pourquoi ? **
+
 )
 """)
 
