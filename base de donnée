@@ -21,12 +21,10 @@ CREATE TABLE utilisateurs (
     date_de_naissance DATE,
     genre TEXT,
     bio TEXT,
-    photo_profil TEXT
-    question 1 : Quelle est la chose la plus embarrassante que tu aies jamais faite?
-    question 2 : Quel est ton mouvement de danse préféré quand personne ne te regarde ?
-    question 3 : Quelle est l'habitude dont tu veux te défaire et pourquoi ?
-    question 4 :Si tu étais un légume, quel légume serais-tu et pourquoi ?
-
+    photo_profil TEXT,
+    question1 TEXT,
+    question2 TEXT,
+    question3 TEXT,
 
 
 **Si tu pouvais collaborer avec un artiste, mort ou vivant, qui serait-il et que créeriez-vous ensemble ? **
