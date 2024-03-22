@@ -1,1 +1,76 @@
+from flask import Flask
 
+app = Flask(__name__)
+
+import sqlite3
+
+# Créer une connexion à la base de données
+conn = sqlite3.connect("site_de_rencontre.db")
+
+# Créer un curseur pour exécuter des requêtes SQL
+cursor = conn.cursor()
+
+# Créer la table "utilisateurs"
+cursor.execute("""
+CREATE TABLE utilisateurs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT,
+    prenom TEXT,
+    email TEXT UNIQUE,
+    mot_de_passe TEXT,
+    date_de_naissance DATE,
+    genre TEXT,
+    bio TEXT,
+    photo_profil TEXT
+)
+""")
+
+# Créer la table "preferences"
+cursor.execute("""
+CREATE TABLE preferences (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    utilisateur_id INTEGER REFERENCES utilisateurs(id),
+    genre_recherche TEXT,
+    tranche_d_age_min INTEGER,
+    tranche_d_age_max INTEGER,
+    distance_max INTEGER,
+    interets TEXT
+)
+""")
+
+# Créer la table "correspondances"
+cursor.execute("""
+CREATE TABLE correspondances (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    utilisateur_id INTEGER REFERENCES utilisateurs(id),
+    correspondance_id INTEGER REFERENCES utilisateurs(id),
+    date_correspondance DATE,
+    statut TEXT
+)
+""")
+
+# Créer la table "messages"
+cursor.execute("""
+CREATE TABLE messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    expediteur_id INTEGER REFERENCES utilisateurs(id),
+    destinataire_id INTEGER REFERENCES utilisateurs(id),
+    message TEXT,
+    date_envoi DATE,
+    lu BOOLEAN
+)
+""")
+
+# Commiter les changements et fermer la connexion
+conn.commit()
+conn.close()
+
+
+
+@app.route('/')
+def hello_world():  # put application's code here
+    return 'Hello World!'
+
+
+if __name__ == '__main__':
+    app.run()
