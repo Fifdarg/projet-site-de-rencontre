@@ -1,67 +1,63 @@
-conn.commit()
+import sqlite3
+from datetime import date
+from flask import Flask, request
+
+app = Flask(__name__)
+
+# Connexion à la base de données SQLite
+conn = sqlite3.connect("rencontres.db")
+cursor = conn.cursor()
 
 def get_preferences():
     cursor.execute("SELECT * FROM utilisateurs JOIN preferences ON utilisateurs.id = preferences.utilisateur_id")
     utilisateurs = cursor.fetchall()
 
-    preferences_hommes = []
-    preferences_femmes = []
+    preferences = []
 
     for utilisateur in utilisateurs:
         id, nom, prenom, email, mot_de_passe, date_de_naissance, genre, bio, photo_profil, question1, question2, question3, pref_id, utilisateur_id, genre_recherche, tranche_d_age_min, tranche_d_age_max, distance_max, interets = utilisateur
 
-        if genre == "homme":
-            preferences = []
-            for utilisateur_femme in utilisateurs:
-                _, _, _, _, _, _, genre_femme, _, _, _, _, _, _, _, _, _, _, _, _ = utilisateur_femme
-                if genre_femme == "femme" and genre_recherche == "femme":
-                    age = (date_de_naissance - utilisateur_femme[5]).days // 365
-                    if tranche_d_age_min <= age <= tranche_d_age_max:
-                        preferences.append(utilisateur_femme[0])
-            preferences_hommes.append((id, preferences))
+        preferences_utilisateur = []
+        for autre_utilisateur in utilisateurs:
+            autre_id, _, _, _, _, _, autre_genre, _, _, _, _, _, _, _, _, _, _, _, _ = autre_utilisateur
+            if autre_genre == genre_recherche:
+                age = (date_de_naissance - autre_utilisateur[5]).days // 365
+                if tranche_d_age_min <= age <= tranche_d_age_max:
+                    preferences_utilisateur.append(autre_id)
+        preferences.append((id, preferences_utilisateur))
 
-        elif genre == "femme":
-            preferences = []
-            for utilisateur_homme in utilisateurs:
-                _, _, _, _, _, _, genre_homme, _, _, _, _, _, _, _, _, _, _, _, _ = utilisateur_homme
-                if genre_homme == "homme" and genre_recherche == "homme":
-                    age = (date_de_naissance - utilisateur_homme[5]).days // 365
-                    if tranche_d_age_min <= age <= tranche_d_age_max:
-                        preferences.append(utilisateur_homme[0])
-            preferences_femmes.append((id, preferences))
+    return preferences
 
-    return preferences_hommes, preferences_femmes
-
-def gale_shapley(preferences_hommes, preferences_femmes):
+def gale_shapley(preferences):
     correspondances = {}
 
-    for homme, preferences in preferences_hommes:
-        correspondances[homme] = None
+    for personne, preferences in preferences:
+        correspondances[personne] = None
 
-    def propose(homme, femme):
-        if correspondances[femme] is None or correspondances[femme] < homme:
-            return femme
+    def propose(personne1, personne2):
+        if correspondances[personne2] is None or correspondances[personne2] < personne1:
+            return personne2
         return None
 
-    libres = set(homme for homme, _ in preferences_hommes)
+    libres = set(personne for personne, _ in preferences)
 
     while libres:
-        homme = libres.pop()
-        for femme in preferences_hommes[homme - 1]:
-            result = propose(homme, femme)
+        personne1 = libres.pop()
+        for personne2 in preferences[personne1 - 1]:
+            result = propose(personne1, personne2)
             if result is not None:
-                correspondances[femme] = homme
-                correspondances[homme] = femme
+                correspondances[personne2] = personne1
+                correspondances[personne1] = personne2
                 break
         else:
-            libres.add(homme)
+            libres.add(personne1)
 
     return correspondances
 
 def save_correspondances(couples):
-    for homme, femme in couples.items():
-        if homme is not None and femme is not None:
-            cursor.execute("INSERT INTO correspondances (utilisateur_id, correspondance_id, date_correspondance, statut) VALUES (?, ?, ?, ?)", (homme, femme, Date('now'), 'stable'))
+    for personne1, personne2 in couples.items():
+        if personne1 is not None and personne2 is not None:
+            cursor.execute("INSERT INTO correspondances (utilisateur_id, correspondance_id, date_correspondance, statut) VALUES (?, ?, ?, ?)", (personne1, personne2, date('now'), 'stable'))
 
     conn.commit()
 
@@ -71,10 +67,11 @@ def hello_world():
 
 @app.route('/calculer_correspondances')
 def calculer_correspondances():
-    preferences_hommes, preferences_femmes = get_preferences()
-    couples_stables = gale_shapley(preferences_hommes, preferences_femmes)
+    preferences = get_preferences()
+    couples_stables = gale_shapley(preferences)
     save_correspondances(couples_stables)
     return 'Les correspondances stables ont été calculées et enregistrées.'
 
 if __name__ == '__main__':
     app.run()
+
