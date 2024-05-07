@@ -1,0 +1,127 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+import random
+from PIL import Image, ImageTk
+
+# Liste de profils fictifs avec leurs questions et réponses
+profiles = [
+    {"username": "John", "age": 28, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Emma", "age": 25, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Alex", "age": 30, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Sophie", "age": 27, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Max", "age": 32, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Lucy", "age": 26, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+]
+
+# Chemins absolus locaux des images
+image_paths = [
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/meuf.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/gros.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/yoda.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/obiwane.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/leila.jpg"
+]
+
+# Classe pour représenter un profil avec des questions et des réponses
+class Profile:
+    def __init__(self, username, age, gender, questions, photo_path):
+        self.username = username
+        self.age = age
+        self.gender = gender
+        self.questions = questions
+        self.photo_path = photo_path
+
+# Conversion des données en objets Profile
+profiles_data = []
+for profile_data, image_path in zip(profiles, image_paths):
+    profile = Profile(profile_data["username"], profile_data["age"], profile_data["gender"], profile_data["questions"], image_path)
+    profiles_data.append(profile)
+
+# Fonction pour afficher un nouveau profil dans l'onglet Tinder
+def show_profile():
+    profile = random.choice(profiles_data)
+    profile_label.config(text=f"{profile.username}\nÂge: {profile.age}\nGenre: {profile.gender}")
+    load_image(profile.photo_path)
+
+# Fonction pour charger une image dans l'interface
+def load_image(image_path):
+    image = Image.open(image_path)
+    image = image.resize((200, 200)) 
+    photo = ImageTk.PhotoImage(image)
+    profile_image_label.config(image=photo)
+    profile_image_label.image = photo
+
+# Fonction pour "aimer" un profil dans l'onglet Tinder
+def like_profile():
+    messagebox.showinfo("Action", "Profil aimé !")
+    show_profile()
+
+# Fonction pour "passer" sur un profil dans l'onglet Tinder
+def pass_profile():
+    messagebox.showinfo("Action", "Profil passé.")
+    show_profile()
+
+# Création de la fenêtre principale
+window = tk.Tk()
+window.title("Trouver un partenaire")
+window.geometry("400x400")
+
+# Création du notebook (onglets)
+notebook = ttk.Notebook(window)
+notebook.pack(fill="both", expand=True)
+
+# Onglet Créer un profil
+tab_creer_profil = ttk.Frame(notebook)
+notebook.add(tab_creer_profil, text="Créer un profil")
+
+# Widgets pour créer un profil
+tk.Label(tab_creer_profil, text="Nom d'utilisateur : ").grid(row=0, column=0, pady=10)
+tk.Label(tab_creer_profil, text="Mot de passe : ").grid(row=1, column=0, pady=10)
+tk.Label(tab_creer_profil, text="Confirmer le mot de passe : ").grid(row=2, column=0, pady=10)
+tk.Label(tab_creer_profil, text="Âge : ").grid(row=3, column=0, pady=10)
+tk.Label(tab_creer_profil, text="Sexe : ").grid(row=4, column=0, pady=10)
+
+username_entry = tk.Entry(tab_creer_profil)
+password_entry = tk.Entry(tab_creer_profil, show="*")
+confirm_password_entry = tk.Entry(tab_creer_profil, show="*")
+age_spinbox = tk.Spinbox(tab_creer_profil, from_=18, to=100)
+gender_combobox = ttk.Combobox(tab_creer_profil, values=["Homme", "Femme", "Autre"])
+
+username_entry.grid(row=0, column=1)
+password_entry.grid(row=1, column=1)
+confirm_password_entry.grid(row=2, column=1)
+age_spinbox.grid(row=3, column=1)
+gender_combobox.grid(row=4, column=1)
+
+def create_profile():
+    messagebox.showinfo("Profil créé", "Votre profil a été créé avec succès !")
+create_button = ttk.Button(tab_creer_profil, text="Créer un profil", command=create_profile)
+create_button.grid(row=5, column=1, pady=(10, 0))
+
+# Onglet Tinder
+tab_tinder = ttk.Frame(notebook)
+notebook.add(tab_tinder, text="Tinder")
+
+# Cadre pour afficher les profils dans l'onglet Tinder
+profile_frame = ttk.Frame(tab_tinder)
+profile_frame.pack(pady=20)
+
+# Label pour afficher les profils dans l'onglet Tinder
+profile_label = ttk.Label(profile_frame, text="", font=("Helvetica", 12))
+profile_label.pack(padx=20, pady=10)
+
+# Label pour afficher les images de profil dans l'onglet Tinder
+profile_image_label = ttk.Label(profile_frame)
+profile_image_label.pack(padx=20, pady=10)
+
+# Boutons "Aimer" et "Passer" dans l'onglet Tinder
+like_button = ttk.Button(tab_tinder, text="Aimer", command=like_profile)
+like_button.pack(side=tk.LEFT, padx=20)
+
+pass_button = ttk.Button(tab_tinder, text="Passer", command=pass_profile)
+pass_button.pack(side=tk.RIGHT, padx=20)
+
+# Affichage du premier profil dans l'onglet Tinder
+show_profile()
+
+window.mainloop()
