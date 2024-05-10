@@ -1,7 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
-import random
+from tkinter import ttk, messagebox, filedialog
 from PIL import Image, ImageTk
+import random
 
 # Liste de profils fictifs avec leurs questions et réponses
 profiles = [
@@ -61,49 +61,100 @@ def pass_profile():
     messagebox.showinfo("Action", "Profil passé.")
     show_profile()
 
+def browse_photo(entry):
+    file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
+    entry.delete(0, tk.END)
+    entry.insert(0, file_path)
+
+def search_partners(min_age, max_age, gender):
+    # Supprime les options précédentes
+    search_gender_combobox['values'] = []
+
+    # Affiche les options appropriées en fonction des valeurs entrées
+    if min_age and max_age:
+        age_range = [age for age in range(int(min_age), int(max_age) + 1)]
+    else:
+        age_range = [profile.age for profile in profiles_data]
+    genders = set([profile.gender for profile in profiles_data])
+
+    search_gender_combobox['values'] = list(genders)
+
 # Création de la fenêtre principale
 window = tk.Tk()
 window.title("Trouver un partenaire")
-window.geometry("400x400")
+window.geometry("800x600")
+
+# Couleur de fond
+bg_color = "#000000"
+
+# Utilisation du thème "clam" pour ttk
+style = ttk.Style(window)
+style.theme_use("clam")
 
 # Création du notebook (onglets)
 notebook = ttk.Notebook(window)
-notebook.pack(fill="both", expand=True)
 
-# Onglet Créer un profil
+# Onglets
 tab_creer_profil = ttk.Frame(notebook)
+tab_rechercher = ttk.Frame(notebook)
+tab_interactions = ttk.Frame(notebook)
+
 notebook.add(tab_creer_profil, text="Créer un profil")
+notebook.add(tab_rechercher, text="Rechercher des partenaires")
+notebook.add(tab_interactions, text="Interagir avec le site")
+
+notebook.pack(expand=1, fill="both")
+
+# Création du cadre avec barre de défilement pour les widgets
+canvas = tk.Canvas(tab_creer_profil)
+scrollable_frame = ttk.Frame(canvas)
+scrollbar = ttk.Scrollbar(tab_creer_profil, orient="vertical", command=canvas.yview)
+canvas.configure(yscrollcommand=scrollbar.set)
+
+scrollable_frame.bind(
+    "<Configure>",
+    lambda e: canvas.configure(
+        scrollregion=canvas.bbox("all")
+    )
+)
+
+canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+canvas.pack(side="left", fill="both", expand=True)
+scrollbar.pack(side="right", fill="y")
 
 # Widgets pour créer un profil
-tk.Label(tab_creer_profil, text="Nom d'utilisateur : ").grid(row=0, column=0, pady=10)
-tk.Label(tab_creer_profil, text="Mot de passe : ").grid(row=1, column=0, pady=10)
-tk.Label(tab_creer_profil, text="Confirmer le mot de passe : ").grid(row=2, column=0, pady=10)
-tk.Label(tab_creer_profil, text="Âge : ").grid(row=3, column=0, pady=10)
-tk.Label(tab_creer_profil, text="Sexe : ").grid(row=4, column=0, pady=10)
+labels = [
+    "Nom : ", "Prénom : ", "Email : ", "Mot de passe : ", "Confirmer le mot de passe : ",
+    "Date de naissance (YYYY-MM-DD) : ", "Genre : ", "Bio : ", "Ville : ", "Photo de profil : ",
+    "Photo 1 : ", "Photo 2 : ", "Question 1 : ", "Question 2 : ", "Question 3 : "
+]
+entries = []
 
-username_entry = tk.Entry(tab_creer_profil)
-password_entry = tk.Entry(tab_creer_profil, show="*")
-confirm_password_entry = tk.Entry(tab_creer_profil, show="*")
-age_spinbox = tk.Spinbox(tab_creer_profil, from_=18, to=100)
-gender_combobox = ttk.Combobox(tab_creer_profil, values=["Homme", "Femme", "Autre"])
+for i, label_text in enumerate(labels):
+    label = tk.Label(scrollable_frame, text=label_text)
+    label.grid(row=i, column=0, pady=10, sticky="w")
+    entry = tk.Entry(scrollable_frame)
+    entry.grid(row=i, column=1, pady=10, sticky="ew")
+    entries.append(entry)
 
-username_entry.grid(row=0, column=1)
-password_entry.grid(row=1, column=1)
-confirm_password_entry.grid(row=2, column=1)
-age_spinbox.grid(row=3, column=1)
-gender_combobox.grid(row=4, column=1)
+# Boutons pour choisir les photos
+for i in range(9, 12):
+    tk.Button(scrollable_frame, text="Parcourir", command=lambda i=i: browse_photo(entries[i])).grid(row=i, column=2)
 
 def create_profile():
+    profile_data = [entry.get() for entry in entries]
+    # Traitement du profil...
     messagebox.showinfo("Profil créé", "Votre profil a été créé avec succès !")
-create_button = ttk.Button(tab_creer_profil, text="Créer un profil", command=create_profile)
-create_button.grid(row=5, column=1, pady=(10, 0))
+
+create_button = ttk.Button(scrollable_frame, text="Créer un profil", command=create_profile)
+create_button.grid(row=len(labels), column=0, columnspan=2, pady=(10, 0), sticky="ew")
 
 # Onglet Tinder
 tab_tinder = ttk.Frame(notebook)
 notebook.add(tab_tinder, text="Tinder")
 
 # Cadre pour afficher les profils dans l'onglet Tinder
-profile_frame = ttk.Frame(tab_tinder)
+profile_frame = ttk.Frame(tab_tinder, style="My.TFrame")
 profile_frame.pack(pady=20)
 
 # Label pour afficher les profils dans l'onglet Tinder
@@ -123,5 +174,34 @@ pass_button.pack(side=tk.RIGHT, padx=20)
 
 # Affichage du premier profil dans l'onglet Tinder
 show_profile()
+
+# Rechercher des partenaires - Widgets
+tk.Label(tab_rechercher, text="Âge minimum : ").grid(row=0, column=0, pady=10)
+tk.Label(tab_rechercher, text="Âge maximum : ").grid(row=1, column=0, pady=10)
+tk.Label(tab_rechercher, text="Sexe : ").grid(row=2, column=0, pady=10)
+
+min_age_spinbox = tk.Spinbox(tab_rechercher, from_=18, to=100)
+max_age_spinbox = tk.Spinbox(tab_rechercher, from_=18, to=100)
+search_gender_combobox = ttk.Combobox(tab_rechercher, values=["Homme", "Femme", "Autre"])
+
+min_age_spinbox.grid(row=0, column=1)
+max_age_spinbox.grid(row=1, column=1)
+search_gender_combobox.grid(row=2, column=1)
+
+search_button = ttk.Button(tab_rechercher, text="Rechercher des partenaires", command=lambda: search_partners(min_age_spinbox.get(), max_age_spinbox.get(), search_gender_combobox.get()))
+search_button.grid(row=3, column=1, pady=(10, 0))
+
+# Interagir avec le site - Widgets
+tk.Label(tab_interactions, text="Destinataire : ").grid(row=0, column=0, pady=10)
+tk.Label(tab_interactions, text="Message : ").grid(row=1, column=0, pady=10)
+
+recipient_entry = tk.Entry(tab_interactions)
+message_text = tk.Text(tab_interactions, height=10, width=50)
+
+recipient_entry.grid(row=0, column=1)
+message_text.grid(row=1, column=1)
+
+send_button = ttk.Button(tab_interactions, text="Envoyer le message", command=lambda: send_message(recipient_entry.get(), message_text.get("1.0", "end")))
+send_button.grid(row=2, column=1, pady=(10, 0))
 
 window.mainloop()
