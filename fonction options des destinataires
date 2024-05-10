@@ -1,0 +1,14 @@
+function genererOptionsDestinataire() {
+        var selectDestinataire = document.getElementById("destinataire");
+
+        // Effacer les options existantes
+        selectDestinataire.innerHTML = "";
+
+        // Ajouter une option par profil aimé
+        fakeProfiles.forEach(function(profile) {
+            var option = document.createElement("option");
+            option.value = profile.name;
+            option.textContent = profile.name;
+            selectDestinataire.appendChild(option);
+        });
+    }
