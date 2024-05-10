@@ -1,0 +1,18 @@
+function envoyerMessage() {
+    var destinataire = document.getElementById("destinataire").value;
+    var message = document.getElementById("message").value;
+
+    // Envoyer le message au destinataire sélectionné (logique d'envoi de message à implémenter)
+
+    // Ajouter le message à l'historique des messages pour ce destinataire
+    if (!historiqueMessages[destinataire]) {
+        historiqueMessages[destinataire] = []; // Créer un tableau pour stocker les messages si ce destinataire n'a pas encore d'historique
+    }
+    historiqueMessages[destinataire].push(message); // Ajouter le message à l'historique
+
+    // Afficher le message de confirmation
+    document.getElementById("nouveau_message").style.display = "block";
+    
+    // Rafraîchir l'affichage de l'historique des messages
+    afficherHistorique(destinataire);
+}
