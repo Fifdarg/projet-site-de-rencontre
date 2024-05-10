@@ -1,0 +1,7 @@
+
+    function ouvrirMessagerie(destinataire) {
+        document.getElementById("destinataire").value = destinataire;
+        openTab(event, 'interagir');
+        // Afficher l'historique des messages avec le destinataire sélectionné
+        afficherHistorique(destinataire);
+    }
