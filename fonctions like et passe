@@ -1,0 +1,12 @@
+function likeProfile() {
+    // Récupérer le profil actuellement affiché
+    var currentProfile = getCurrentProfile();
+
+    // Ajouter le profil aimé à la liste des profils aimés
+    addLikedProfile(currentProfile);
+      displayProfile();
+}
+    
+function passProfile() {
+    displayProfile();
+}
