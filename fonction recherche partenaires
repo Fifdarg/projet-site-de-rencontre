@@ -1,0 +1,31 @@
+     function rechercherPartenaires() {
+        var critere = document.getElementById("critere").value;
+        var ageMin = document.getElementById("age_min").value;
+        var ageMax = document.getElementById("age_max").value;
+        var sexe = document.getElementById("sexe").value;
+
+        // Filtrer les partenaires selon les critères
+        var partenairesTrouves = fakeProfiles.filter(function(partenaire) {
+            return partenaire.age >= ageMin && partenaire.age <= ageMax && partenaire.genre.toLowerCase() === sexe.toLowerCase() && (partenaire.name.toLowerCase().includes(critere.toLowerCase()) || partenaire.bio.toLowerCase().includes(critere.toLowerCase()));
+        });
+
+        // Afficher les résultats
+        var resultatHTML = "<h3>Résultats de la recherche :</h3>";
+        if (partenairesTrouves.length > 0) {
+            partenairesTrouves.forEach(function(partenaire) {
+                resultatHTML += "<div class='profil'>";
+                resultatHTML += "<img src='" + partenaire.photo + "' alt='Photo de " + partenaire.name + "' class='photo_profil' width='150' height='150'>";
+                resultatHTML += "<h4>" + partenaire.name + "</h4>";
+                resultatHTML += "<p>" + partenaire.bio + "</p>";
+                resultatHTML += "<a href='#' onclick='ouvrirMessagerie(\"" + partenaire.name + "\")'>Envoyer un message</a>";
+                resultatHTML += "</div>";
+            });
+        } else {
+            resultatHTML += "<p>Aucun partenaire trouvé pour les critères donnés.</p>";
+        }
+
+        document.getElementById("resultats_recherche").innerHTML = resultatHTML;
+
+        // Empêcher le formulaire de se soumettre normalement
+        return false;
+    }
