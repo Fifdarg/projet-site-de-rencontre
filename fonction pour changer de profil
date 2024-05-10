@@ -1,0 +1,12 @@
+function displayProfile() {
+    // Choisissez un profil aléatoire dans la liste des profils
+    var randomIndex = Math.floor(Math.random() * fakeProfiles.length);
+    var profile = fakeProfiles[randomIndex];
+
+    // Mettez à jour le contenu du profil affiché
+    document.getElementById("profile_name").textContent = profile.name;
+    document.getElementById("profile_age_gender").textContent = profile.age + " ans, " + profile.genre;
+    document.getElementById("profile_bio").textContent = profile.bio;
+    document.getElementById("profile_image").src = profile.photo;
+
+}
