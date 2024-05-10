@@ -1,0 +1,18 @@
+var likedProfiles = [];
+function getCurrentProfile() {
+    // Récupérer le profil actuellement affiché
+    var profileImage = document.getElementById("profile_image");
+    var profileName = document.getElementById("profile_name").textContent;
+    var profileAgeGender = document.getElementById("profile_age_gender").textContent;
+    var profileBio = document.getElementById("profile_bio").textContent;
+
+    // Créer un objet profil avec les informations récupérées
+    var profile = {
+        name: profileName,
+        age_gender: profileAgeGender,
+        bio: profileBio,
+       
+    };
+
+    return profile;
+}
