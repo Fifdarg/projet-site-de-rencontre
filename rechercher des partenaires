@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarLove</title>
+    <style>
+        /* Votre style CSS ici */
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Vos onglets et contenus ici -->
+</div>
+
+<div id="rechercher" class="tabcontent">
+    <h2>Rechercher des partenaires</h2>
+    <form onsubmit="return rechercherPartenaires()">
+        <div class="form-group">
+            <label for="critere">Critères de recherche :</label>
+            <input type="text" id="critere" name="critere">
+        </div>
+        <div class="form-group">
+            <label for="age_min">Âge minimum :</label>
+            <input type="number" id="age_min" name="age_min">
+        </div>
+        <div class="form-group">
+            <label for="age_max">Âge maximum :</label>
+            <input type="number" id="age_max" name="age_max">
+        </div>
+        <div class="form-group">
+            <label for="sexe">Sexe :</label>
+            <select id="sexe" name="sexe">
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+                <option value="autre">Autre</option>
+            </select>
+        </div>
+        <input type="submit" value="Rechercher">
+    </form>
+
+    <!-- Élément où afficher les résultats -->
+    <div id="resultats_recherche"></div>
+</div>
+
+<script>
+    function rechercherPartenaires() {
+        var critere = document.getElementById("critere").value;
+        var ageMin = document.getElementById("age_min").value;
+        var ageMax = document.getElementById("age_max").value;
+        var sexe = document.getElementById("sexe").value;
+
+        // Filtrer les partenaires selon les critères
+        var partenairesTrouves = fakeProfiles.filter(function(partenaire) {
+            return partenaire.age >= ageMin && partenaire.age <= ageMax && partenaire.genre.toLowerCase() === sexe.toLowerCase();
+        });
+
+        // Afficher les résultats
+        var resultatHTML = "<h3>Résultats de la recherche :</h3>";
+        if (partenairesTrouves.length > 0) {
+            resultatHTML += "<ul>";
+            partenairesTrouves.forEach(function(partenaire) {
+                resultatHTML += "<li>" + partenaire.name + ", " + partenaire.age + " ans, " + partenaire.genre + "</li>";
+            });
+            resultatHTML += "</ul>";
+        } else {
+            resultatHTML += "<p>Aucun partenaire trouvé pour les critères donnés.</p>";
+        }
+
+        document.getElementById("resultats_recherche").innerHTML = resultatHTML;
+
+        // Empêcher le formulaire de se soumettre normalement
+        return false;
+    }
+
+    // Tableau de faux profils
+    var fakeProfiles = [
+        // Vos profils ici
+    ];
+</script>
+
+</body>
+</html>
