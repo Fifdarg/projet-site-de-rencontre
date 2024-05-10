@@ -1,0 +1,204 @@
+import tkinter as tk
+from tkinter import ttk, messagebox, filedialog
+import random
+from PIL import Image, ImageTk
+
+# Liste de profils fictifs avec leurs questions et réponses
+profiles = [
+    {"username": "Alice", "age": 29, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Tom", "age": 31, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Lily", "age": 24, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "David", "age": 33, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Sophia", "age": 30, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Chris", "age": 28, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "John", "age": 28, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Emma", "age": 25, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Alex", "age": 30, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Sophie", "age": 27, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Max", "age": 32, "gender": "Homme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+    {"username": "Lucy", "age": 26, "gender": "Femme", "questions": {"Question 1": "Réponse 1", "Question 2": "Réponse 2"}},
+]
+
+# Chemins absolus locaux des images
+image_paths = [
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/meuf.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/gros.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/yoda.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/obiwane.jpg",
+    "C:/Users/darge/AppData/Local/Programs/Python/Python312/images/leila.jpg"
+]
+
+# Classe pour représenter un profil avec des questions et des réponses
+class Profile:
+    def __init__(self, username, age, gender, questions, photo_path):
+        self.username = username
+        self.age = age
+        self.gender = gender
+        self.questions = questions
+        self.photo_path = photo_path
+
+# Conversion des données en objets Profile
+profiles_data = []
+for profile_data, image_path in zip(profiles, image_paths):
+    profile = Profile(profile_data["username"], profile_data["age"], profile_data["gender"], profile_data["questions"], image_path)
+    profiles_data.append(profile)
+
+# Fonction pour afficher un nouveau profil dans l'onglet Tinder
+def show_profile():
+    profile = random.choice(profiles_data)
+    profile_label.config(text=f"{profile.username}\nÂge: {profile.age}\nGenre: {profile.gender}")
+    load_image(profile.photo_path)
+
+# Fonction pour charger une image dans l'interface
+def load_image(image_path):
+    image = Image.open(image_path)
+    image = image.resize((200, 200)) 
+    photo = ImageTk.PhotoImage(image)
+    profile_image_label.config(image=photo)
+    profile_image_label.image = photo
+
+# Fonction pour "aimer" un profil dans l'onglet Tinder
+def like_profile():
+    messagebox.showinfo("Action", "Profil aimé !")
+    show_profile()
+
+# Fonction pour "passer" sur un profil dans l'onglet Tinder
+def pass_profile():
+    messagebox.showinfo("Action", "Profil passé.")
+    show_profile()
+
+# Fonction pour rechercher des partenaires en fonction des critères
+def search_partners(min_age, max_age, gender):
+    messagebox.showinfo("Recherche de partenaires", f"Recherche de partenaires avec âge compris entre {min_age} et {max_age}, de sexe {gender}.")
+
+# Création de la fenêtre principale
+window = tk.Tk()
+window.title("Trouver un partenaire")
+window.geometry("800x600")
+
+# Couleur de fond
+bg_color = "#000000"
+
+# Utilisation du thème "clam" pour ttk
+style = ttk.Style(window)
+style.theme_use("clam")
+
+# Création du notebook (onglets)
+notebook = ttk.Notebook(window)
+
+# Onglets
+tab_creer_profil = ttk.Frame(notebook)
+tab_rechercher = ttk.Frame(notebook)
+tab_interactions = ttk.Frame(notebook)
+
+notebook.add(tab_creer_profil, text="Créer un profil")
+notebook.add(tab_rechercher, text="Rechercher des partenaires")
+notebook.add(tab_interactions, text="Interagir avec le site")
+
+notebook.pack(expand=1, fill="both")
+
+def browse_photo(entry):
+    file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
+    entry.delete(0, tk.END)
+    entry.insert(0, file_path)
+
+# Création du cadre avec barre de défilement pour les widgets
+canvas = tk.Canvas(tab_creer_profil)
+scrollable_frame = ttk.Frame(canvas)
+scrollbar = ttk.Scrollbar(tab_creer_profil, orient="vertical", command=canvas.yview)
+canvas.configure(yscrollcommand=scrollbar.set)
+
+scrollable_frame.bind(
+    "<Configure>",
+    lambda e: canvas.configure(
+        scrollregion=canvas.bbox("all")
+    )
+)
+
+canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+canvas.pack(side="left", fill="both", expand=True)
+scrollbar.pack(side="right", fill="y")
+
+# Widgets pour créer un profil
+labels = [
+    "Nom : ", "Prénom : ", "Email : ", "Mot de passe : ", "Confirmer le mot de passe : ",
+    "Date de naissance (YYYY-MM-DD) : ", "Genre : ", "Bio : ", "Ville : ", "Photo de profil : ",
+    "Photo 1 : ", "Photo 2 : ", "Question 1 : ", "Question 2 : ", "Question 3 : "
+]
+entries = []
+
+for i, label_text in enumerate(labels):
+    label = tk.Label(scrollable_frame, text=label_text)
+    label.grid(row=i, column=0, pady=10, sticky="w")
+    entry = tk.Entry(scrollable_frame)
+    entry.grid(row=i, column=1, pady=10, sticky="ew")
+    entries.append(entry)
+
+# Boutons pour choisir les photos
+for i in range(9, 12):
+    tk.Button(scrollable_frame, text="Parcourir", command=lambda i=i: browse_photo(entries[i])).grid(row=i, column=2)
+
+def create_profile():
+    profile_data = [entry.get() for entry in entries]
+    # Traitement du profil...
+    messagebox.showinfo("Profil créé", "Votre profil a été créé avec succès !")
+
+create_button = ttk.Button(scrollable_frame, text="Créer un profil", command=create_profile)
+create_button.grid(row=len(labels), column=0, columnspan=2, pady=(10, 0), sticky="ew")
+
+# Onglet Tinder
+tab_tinder = ttk.Frame(notebook)
+notebook.add(tab_tinder, text="Tinder")
+
+# Cadre pour afficher les profils dans l'onglet Tinder
+profile_frame = ttk.Frame(tab_tinder, style="My.TFrame")
+profile_frame.pack(pady=20)
+
+# Label pour afficher les profils dans l'onglet Tinder
+profile_label = ttk.Label(profile_frame, text="", font=("Helvetica", 12))
+profile_label.pack(padx=20, pady=10)
+
+# Label pour afficher les images de profil dans l'onglet Tinder
+profile_image_label = ttk.Label(profile_frame)
+profile_image_label.pack(padx=20, pady=10)
+
+# Boutons "Aimer" et "Passer" dans l'onglet Tinder
+like_button = ttk.Button(tab_tinder, text="Aimer", command=like_profile)
+like_button.pack(side=tk.LEFT, padx=20)
+
+pass_button = ttk.Button(tab_tinder, text="Passer", command=pass_profile)
+pass_button.pack(side=tk.RIGHT, padx=20)
+
+# Affichage du premier profil dans l'onglet Tinder
+show_profile()
+
+# Rechercher des partenaires - Widgets
+tk.Label(tab_rechercher, text="Âge minimum : ").grid(row=0, column=0, pady=10)
+tk.Label(tab_rechercher, text="Âge maximum : ").grid(row=1, column=0, pady=10)
+tk.Label(tab_rechercher, text="Sexe : ").grid(row=2, column=0, pady=10)
+
+min_age_spinbox = tk.Spinbox(tab_rechercher, from_=18, to=100)
+max_age_spinbox = tk.Spinbox(tab_rechercher, from_=18, to=100)
+search_gender_combobox = ttk.Combobox(tab_rechercher, values=["Homme", "Femme", "Autre"])
+
+min_age_spinbox.grid(row=0, column=1)
+max_age_spinbox.grid(row=1, column=1)
+search_gender_combobox.grid(row=2, column=1)
+
+search_button = ttk.Button(tab_rechercher, text="Rechercher des partenaires", command=lambda: search_partners(min_age_spinbox.get(), max_age_spinbox.get(), search_gender_combobox.get()))
+search_button.grid(row=3, column=1, pady=(10, 0))
+
+# Interagir avec le site - Widgets
+tk.Label(tab_interactions, text="Destinataire : ").grid(row=0, column=0, pady=10)
+tk.Label(tab_interactions, text="Message : ").grid(row=1, column=0, pady=10)
+
+recipient_entry = tk.Entry(tab_interactions)
+message_text = tk.Text(tab_interactions, height=10, width=50)
+
+recipient_entry.grid(row=0, column=1)
+message_text.grid(row=1, column=1)
+
+send_button = ttk.Button(tab_interactions, text="Envoyer le message", command=lambda: send_message(recipient_entry.get(), message_text.get("1.0", "end")))
+send_button.grid(row=2, column=1, pady=(10, 0))
+
+window.mainloop()
