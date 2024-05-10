@@ -1,0 +1,38 @@
+function createProfile() {
+        var nom = document.getElementById("nom").value;
+        var prenom = document.getElementById("prenom").value;
+        var email = document.getElementById("email").value;
+        var motDePasse = document.getElementById("mot_de_passe").value;
+        var dateDeNaissance = document.getElementById("date_de_naissance").value;
+        var genre = document.getElementById("genre").value;
+        var bio = document.getElementById("bio").value;
+        var ville = document.getElementById("ville").value;
+
+        // Construction du message de confirmation
+        var confirmationMessage = "Votre profil a été créé avec succès !\n\n";
+        confirmationMessage += "Nom : " + nom + "\n";
+        confirmationMessage += "Prénom : " + prenom + "\n";
+        confirmationMessage += "Email : " + email + "\n";
+        confirmationMessage += "Date de naissance : " + dateDeNaissance + "\n";
+        confirmationMessage += "Genre : " + genre + "\n";
+        confirmationMessage += "Bio : " + bio + "\n";
+        confirmationMessage += "Ville : " + ville;
+
+        // Stockage du message dans localStorage
+        localStorage.setItem("confirmationMessage", confirmationMessage);
+
+        // Recharger la page pour la rendre vierge
+        window.location.reload();
+
+        // Empêcher le formulaire de se soumettre normalement
+        return false;
+    }
+    window.onload = function() {
+        var confirmationMessage = localStorage.getItem("confirmationMessage");
+        if (confirmationMessage) {
+            alert(confirmationMessage);
+            localStorage.removeItem("confirmationMessage"); // Supprimer le message après l'avoir affiché
+        }
+    };
+
+   
