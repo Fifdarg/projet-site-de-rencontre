@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarLove</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #dc8585;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Styles pour les onglets */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #de9393;
+            display: flex;
+        }
+
+        /* Style des liens d'onglets */
+        .tab a {
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Change la couleur de fond sur les liens d'onglets en survol */
+        .tab a:hover {
+            background-color: #ddd;
+        }
+
+        /* Crée un contenu invisible en utilisant clear:both pour qu'il n'interfère pas avec les onglets */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Onglets -->
+    <div class="tab">
+        <a href="#" class="tablinks" onclick="openTab(event, 'bienvenue')">Bienvenue</a>
+        <a href="#" class="tablinks" onclick="openTab(event, 'creer_profil')">Créer un profil</a>
+        <a href="#" class="tablinks" onclick="openTab(event, 'rechercher')">Rechercher des partenaires</a>
+        <a href="#" class="tablinks" onclick="openTab(event, 'interagir')">Messagerie</a> <!-- Renommé en "Messagerie" -->
+        <a href="#" class="tablinks" onclick="openTab(event, 'tinder')">StarLove</a> <!-- Renommé en "StarLove" -->
+    </div>
+
+
+    <!-- Contenu des onglets -->
+    <div id="bienvenue" class="tabcontent">
+        <h2>Bienvenue sur StarLove</h2>
+        <p>Bienvenue sur StarLove, le meilleur endroit pour trouver votre âme sœur. Utilisez nos fonctionnalités pour créer votre profil, rechercher des partenaires, interagir avec d'autres utilisateurs et plus encore!</p>
+    </div>
+
+    <div id="creer_profil" class="tabcontent" >
+        <h2>Créer un profil StarLove</h2>
+        <form action="/submit_profile" method="post" onsubmit="return createProfile()">
+            <div class="form-group">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" required>
+            </div>
+            <div class="form-group">
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="mot_de_passe">Mot de passe :</label>
+                <input type="password" id="mot_de_passe" name="mot_de_passe" required>
+            </div>
+            <div class="form-group">
+                <label for="date_de_naissance">Date de naissance (YYYY-MM-DD) :</label>
+                <input type="text" id="date_de_naissance" name="date_de_naissance" required>
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre :</label>
+                <input type="text" id="genre" name="genre" required>
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio :</label>
+                <textarea id="bio" name="bio" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville" required>
+            </div>
+            <div class="form-group">
+                <label for="photo_profil">Photo de profil :</label>
+                <input type="file" id="photo_profil" name="photo_profil" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="photo1">Photo 1 :</label>
+                <input type="file" id="photo1" name="photo1" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="photo2">Photo 2 :</label>
+                <input type="file" id="photo2" name="photo2" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="question1">3 qualites essentielles pour trouver le bon.ne.s :</label>
+                <input type="text" id="question1" name="3 qualités" required>
+            </div>
+            <div class="form-group">
+                <label for="question2">3 defauts :</label>
+                <input type="text" id="question2" name="3 defauts" required>
+            </div>
+            <div class="form-group">
+                <label for="Question 3">Heureux? :</label>
+                <input type="text" id="Question 3" name="Question 3" required>
+            </div>
+            <input type="submit" value="Créer un profil">
+        </form>
+    </div>
+
+    
+    <div id="rechercher" class="tabcontent">
+        <h2>Rechercher des partenaires</h2>
+        <form onsubmit="return rechercherPartenaires()">
+            <div class="form-group">
+                <input type="text" id="critere" name="critere">
+            </div>
+            <div class="form-group">
+                <label for="age_min">Âge minimum :</label>
+                <input type="number" id="age_min" name="age_min">
+            </div>
+            <div class="form-group">
+                <label for="age_max">Âge maximum :</label>
+                <input type="number" id="age_max" name="age_max">
+            </div>
+            <div class="form-group">
+                <label for="sexe">Sexe :</label>
+                <select id="sexe" name="sexe">
+                    <option value="homme">Homme</option>
+                    <option value="femme">Femme</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+            <input type="submit" value="Rechercher">
+        </form>
+    
+        <!-- Élément où afficher les résultats -->
+        <div id="resultats_recherche"></div>
+    </div>
+    <script>
+        function rechercherPartenaires() {
+            var critere = document.getElementById("critere").value;
+            var ageMin = document.getElementById("age_min").value;
+            var ageMax = document.getElementById("age_max").value;
+            var sexe = document.getElementById("sexe").value;
+    
+            // Filtrer les partenaires selon les critères
+            var partenairesTrouves = fakeProfiles.filter(function(partenaire) {
+                return partenaire.age >= ageMin && partenaire.age <= ageMax && partenaire.genre.toLowerCase() === sexe.toLowerCase();
+            });
+    
+            // Afficher les résultats
+            var resultatHTML = "<h3>Résultats de la recherche :</h3>";
+            if (partenairesTrouves.length > 0) {
+                resultatHTML += "<ul>";
+                partenairesTrouves.forEach(function(partenaire) {
+                    resultatHTML += "<li>" + partenaire.name + ", " + partenaire.age + " ans, " + partenaire.genre + "</li>";
+                });
+                resultatHTML += "</ul>";
+            } else {
+                resultatHTML += "<p>Aucun partenaire trouvé pour les critères donnés.</p>";
+            }
+    
+            document.getElementById("resultats_recherche").innerHTML = resultatHTML;
+    
+            // Empêcher le formulaire de se soumettre normalement
+            return false;
+        }
+    
+        // Tableau de faux profils
+        var fakeProfiles = [
+            // Vos profils ici
+        ];
+    </script>
+    
+    
+
+    <div id="interagir" class="tabcontent">
+        <div class="form-group">
+            <label for="destinataire">Destinataire :</label>
+            <select id="destinataire" name="destinataire" onchange="effacerChampMessage(); afficherHistorique(this.value)">
+                <!-- Les options seront générées dynamiquement ici -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="message">Message :</label>
+            <textarea id="message" name="message" rows="4" cols="50"></textarea>
+        </div>
+        <button onclick="envoyerMessage()">Envoyer le message</button>
+        <div id="nouveau_message" style="display: none;">
+            <h2>Nouveau message envoyé !</h2>
+        </div>
+        <!-- Élément où afficher l'historique des messages -->
+        <div id="historique_messages"></div>
+    </div>
+
+    <div id="tinder" class="tabcontent">
+        <h2>Tinder</h2>
+        <!-- Contenu de l'onglet Tinder -->
+        <div id="tinder_profile">
+            <img src="placeholder.jpg" alt="Photo du profil" id="profile_image" width="200" height="200">
+            <h3 id="profile_name"></h3>
+            <p id="profile_age_gender"></p>
+            <p id="profile_bio"></p>
+        <div id="tinder_buttons">
+            <button class="like" onclick="likeProfile()">Aimer</button>
+            <button class="pass" onclick="passProfile()">Passer</button>
+        </div>
+        <div id="liked_profiles">
+            <h2>Profils aimés</h2>
+            <ul id="liked_profiles_list">
+                <!-- La liste des profils aimés sera affichée ici -->
+            </ul>
+        </div>
+</div>
+
+
+<script>
+     function rechercherPartenaires() {
+        var critere = document.getElementById("critere").value;
+        var ageMin = document.getElementById("age_min").value;
+        var ageMax = document.getElementById("age_max").value;
+        var sexe = document.getElementById("sexe").value;
+
+        // Filtrer les partenaires selon les critères
+        var partenairesTrouves = fakeProfiles.filter(function(partenaire) {
+            return partenaire.age >= ageMin && partenaire.age <= ageMax && partenaire.genre.toLowerCase() === sexe.toLowerCase() && (partenaire.name.toLowerCase().includes(critere.toLowerCase()) || partenaire.bio.toLowerCase().includes(critere.toLowerCase()));
+        });
+
+        // Afficher les résultats
+        var resultatHTML = "<h3>Résultats de la recherche :</h3>";
+        if (partenairesTrouves.length > 0) {
+            partenairesTrouves.forEach(function(partenaire) {
+                resultatHTML += "<div class='profil'>";
+                resultatHTML += "<img src='" + partenaire.photo + "' alt='Photo de " + partenaire.name + "' class='photo_profil' width='150' height='150'>";
+                resultatHTML += "<h4>" + partenaire.name + "</h4>";
+                resultatHTML += "<p>" + partenaire.bio + "</p>";
+                resultatHTML += "<a href='#' onclick='ouvrirMessagerie(\"" + partenaire.name + "\")'>Envoyer un message</a>";
+                resultatHTML += "</div>";
+            });
+        } else {
+            resultatHTML += "<p>Aucun partenaire trouvé pour les critères donnés.</p>";
+        }
+
+        document.getElementById("resultats_recherche").innerHTML = resultatHTML;
+
+        // Empêcher le formulaire de se soumettre normalement
+        return false;
+    }
+
+    function ouvrirMessagerie(destinataire) {
+        document.getElementById("destinataire").value = destinataire;
+        openTab(event, 'interagir');
+        // Afficher l'historique des messages avec le destinataire sélectionné
+        afficherHistorique(destinataire);
+    }
+    function genererOptionsDestinataire() {
+        var selectDestinataire = document.getElementById("destinataire");
+
+        // Effacer les options existantes
+        selectDestinataire.innerHTML = "";
+
+        // Ajouter une option par profil aimé
+        fakeProfiles.forEach(function(profile) {
+            var option = document.createElement("option");
+            option.value = profile.name;
+            option.textContent = profile.name;
+            selectDestinataire.appendChild(option);
+        });
+    }
+    
+
+    // Appeler la fonction pour générer les options lors du chargement de la page
+    window.onload = genererOptionsDestinataire;
+    window.onload = genererOptionsDestinataire;
+    function effacerChampMessage() {
+        document.getElementById("message").value = ""; // Efface le contenu du champ de message
+    }
+    function genererOptionsDestinataire() {
+        var selectDestinataire = document.getElementById("destinataire");
+
+        // Effacer les options existantes
+        selectDestinataire.innerHTML = "";
+
+        // Ajouter une option par profil aimé
+        fakeProfiles.forEach(function(profile) {
+            var option = document.createElement("option");
+            option.value = profile.name;
+            option.textContent = profile.name;
+            option.onclick = function() {
+                // Remplir automatiquement le champ destinataire avec le nom du profil sélectionné
+                document.getElementById("destinataire").value = profile.name;
+            };
+            selectDestinataire.appendChild(option);
+        });
+    }
+
+    var historiqueMessages = {}; // Utiliser un objet pour stocker l'historique des messages par destinataire
+
+function envoyerMessage() {
+    var destinataire = document.getElementById("destinataire").value;
+    var message = document.getElementById("message").value;
+
+    // Envoyer le message au destinataire sélectionné (logique d'envoi de message à implémenter)
+
+    // Ajouter le message à l'historique des messages pour ce destinataire
+    if (!historiqueMessages[destinataire]) {
+        historiqueMessages[destinataire] = []; // Créer un tableau pour stocker les messages si ce destinataire n'a pas encore d'historique
+    }
+    historiqueMessages[destinataire].push(message); // Ajouter le message à l'historique
+
+    // Afficher le message de confirmation
+    document.getElementById("nouveau_message").style.display = "block";
+    
+    // Rafraîchir l'affichage de l'historique des messages
+    afficherHistorique(destinataire);
+}
+
+function afficherHistorique(destinataire) {
+    // Vérifier si l'historique des messages pour ce destinataire existe
+    if (historiqueMessages[destinataire]) {
+        var historiqueHTML = "<h3>Historique des messages avec " + destinataire + " :</h3>";
+        historiqueHTML += "<ul>";
+        historiqueMessages[destinataire].forEach(function(message) {
+            historiqueHTML += "<li>" + message + "</li>";
+        });
+        historiqueHTML += "</ul>";
+
+        // Afficher l'historique des messages dans l'élément HTML approprié
+        document.getElementById("historique_messages").innerHTML = historiqueHTML;
+    } else {
+        // Effacer l'historique des messages s'il n'y a pas de messages pour ce destinataire
+        document.getElementById("historique_messages").innerHTML = "";
+    }
+}
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+// Tableau de faux profils
+// Tableau de faux profils
+var fakeProfiles = [
+
+    {
+        name: "Leia",
+        age: 25,
+        genre: "Femme",
+        bio: "Salut, je suis Lei et j'aime les longues promenades sur la plage et la cuisine.",
+        photo: "https://pic.clubic.com/v1/images/1757177/raw?fit=smartCrop&height=900&width=900&hash=096d1d65a6b038402ce74cf6b4d6e1ee6c14847d"
+    },
+    {
+        name: "Han",
+        age: 28,
+        genre: "Homme",
+        bio: "Salut, je suis han et je suis passionné de musique et de voyages.",
+        photo: "https://www.starwars-universe.com/images/encyclopedie/personnages/images_v6/Hansolo.jpg"
+    },
+    {
+        name: "Maz",
+        age: 30,
+        genre: "Femme",
+        bio: "Salut, je suis Maz et je suis une aventurière en herbe qui adore explorer de nouveaux endroits.",
+        photo: "https://radiodisneyclub.fr/wp-content/uploads/2019/03/Maz-Kanata-700x350.jpeg"
+    },
+    {
+        name: "Yoda",
+        age: 900,
+        genre: "Homme",
+        bio: "Salut, je suis Yoda et je suis un amateur de sports et de plein air.",
+        photo: "https://static.wikia.nocookie.net/frstarwars/images/5/5f/Yoda.png/revision/latest?cb=20161009183018"
+    },
+    {
+        name: "Obi Wan",
+        age: 27,
+        genre: "Homme",
+        bio: "Salut, je suis Obi Wan et je suis passionné de photographie et de cinéma.",
+        photo: "https://www.liveabout.com/thmb/F5lfgFptU9DNTDCT-xNEtot0lQ0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/EP2-IA-60435_R_8x10-56a83bea3df78cf7729d314a.jpg"
+    },
+    {
+        name: "Padme",
+        age: 22,
+        genre: "Femme",
+        bio: "Salut, je suis Padme et j'adore la lecture et les chats.",
+        photo: "https://static.wikia.nocookie.net/frstarwars/images/3/3f/Padm%C3%A9_Amidala.jpg/revision/latest/thumbnail/width/360/height/360?cb=20150701092402"
+    },
+    {
+        name: "Palpatine",
+        age: 89,
+        genre: "Homme",
+        bio: "Salut, je suis Palpatine et je suis un grand amateur de cuisine et de vin.",
+        photo: "https://le-sabre-laser.fr/cdn/shop/articles/palpatineix_1200x1200.jpg?v=1679227282"
+    },
+    {
+        name: "Jyn",
+        age: 26,
+        genre: "Femme",
+        bio: "Salut, je suis Jyn et je suis une artiste qui aime peindre et dessiner.",
+        photo: "https://img.planete-starwars.com/upload/databank/79240-755d0e7a9e9df094ab4e2f8f2e466c51.jpg"
+    },
+    {
+        name: "Dark Vader",
+        age: 24,
+        genre: "Homme",
+        bio: "Salut, je suis Dark Vader, ou Anakin pour les intimes et je suis passionné de musique et de théâtre.",
+        photo: "https://sabrelaser-france.fr/cdn/shop/articles/dark-vador-une-icone-de-star-wars-364663.jpg?v=1699023255"
+    },
+    {
+        name: "Ahsoka",
+        age: 31,
+        genre: "Femme",
+        bio: "Salut, je suis Ahsoka et je suis une adepte du fitness et de la santé.",
+        photo: "https://static.hitek.fr/img/actualite/ill_m/1134731842/ahsokatanosabresblancs.png"
+    },
+    {
+        name: "Chewi",
+        age: 27,
+        genre: "Homme",
+        bio: "Salut, je suis Chewi et je suis un voyageur du monde et un amateur de sports extrêmes.",
+        photo: "https://media.vanityfair.fr/photos/60d3729170d918d588008cac/1:1/w_718,h_718,c_limit/vf_main_chewbacca_8102.jpeg"
+    },
+    {
+        name: "Luc",
+        age: 25,
+        genre: "Homme",
+        bio: "Salut, je suis Luc et je suis un passionné de jeux vidéo et de technologie.",
+        photo: "https://static.wikia.nocookie.net/starwars/images/1/17/LukeSkywalker-Insider217.png/revision/latest?cb=20240130192944"
+    },
+    {
+        name: "R2",
+        age: 26,
+        genre: "Homme",
+        bio: "BIP BIP BIP R2D2 BOUP BWAAAAA",
+        photo: "https://sabrelaser-france.fr/cdn/shop/articles/r2d2-585871.jpg?v=1708939411"
+    },
+    {
+        name: "C3PO",
+        age: 27,
+        genre: "Homme",
+        bio: "Salut, je suis C3PO ou 6PO et je suis un aventurier et un amateur de sports extrêmes.",
+        photo: "https://lumiere-a.akamaihd.net/v1/images/c-3po-main_d6850e28.jpeg?region=176%2C0%2C951%2C536"
+    },
+    {
+        name: "Amilyn",
+        age: 25,
+        genre: "Femme",
+        bio: "Salut, je suis Amilyn et je suis une amatrice d'art et de culture.",
+        photo: "https://img.planete-starwars.com/upload/databank/73715-holdo-elle.png"
+    },
+    {
+        name: "Windu",
+        age: 28,
+        genre: "Homme",
+        bio: "Salut, je suis Windu et je suis un passionné de musique et de cinéma.",
+        photo: "https://static.wikia.nocookie.net/frstarwars/images/e/e8/Mace_Windu_WoSW.png/revision/latest?cb=20220916100712"
+    },
+    
+];
+  
+
+
+
+function likeProfile() {
+    // Récupérer le profil actuellement affiché
+    var currentProfile = getCurrentProfile();
+
+    // Ajouter le profil aimé à la liste des profils aimés
+    addLikedProfile(currentProfile);
+      displayProfile();
+}
+    
+function passProfile() {
+    displayProfile();
+}
+
+ 
+
+function displayProfile() {
+    // Choisissez un profil aléatoire dans la liste des profils
+    var randomIndex = Math.floor(Math.random() * fakeProfiles.length);
+    var profile = fakeProfiles[randomIndex];
+
+    // Mettez à jour le contenu du profil affiché
+    document.getElementById("profile_name").textContent = profile.name;
+    document.getElementById("profile_age_gender").textContent = profile.age + " ans, " + profile.genre;
+    document.getElementById("profile_bio").textContent = profile.bio;
+    document.getElementById("profile_image").src = profile.photo;
+
+}
+
+var likedProfiles = [];
+function getCurrentProfile() {
+    // Récupérer le profil actuellement affiché
+    var profileImage = document.getElementById("profile_image");
+    var profileName = document.getElementById("profile_name").textContent;
+    var profileAgeGender = document.getElementById("profile_age_gender").textContent;
+    var profileBio = document.getElementById("profile_bio").textContent;
+
+    // Créer un objet profil avec les informations récupérées
+    var profile = {
+        name: profileName,
+        age_gender: profileAgeGender,
+        bio: profileBio,
+        // Vous pouvez également inclure d'autres informations telles que l'âge, le genre, etc.
+    };
+
+    return profile;
+}
+
+function addLikedProfile(profile) {
+    // Ajouter le profil aimé à la liste des profils aimés
+    var likedProfilesList = document.getElementById("liked_profiles_list");
+    var li = document.createElement("li");
+
+    // Créer un lien pour discuter avec la personne aimée
+    var link = document.createElement("a");
+    link.textContent = profile.name;
+    link.href = "#"; // Mettez "#" pour que le lien n'ait pas d'action par défaut
+
+    // Ajouter un gestionnaire d'événement pour ouvrir la section d'interaction avec ce profil
+    link.onclick = function() {
+        // Remplir automatiquement le champ destinataire avec le nom du profil sélectionné
+        document.getElementById("destinataire").value = profile.name;
+        // Afficher la section d'interaction avec le profil
+        openTab(event, 'interagir');
+    };
+
+    // Ajouter le lien à l'élément de liste
+    li.appendChild(link);
+
+    // Ajouter l'élément de liste à la liste des profils aimés
+    likedProfilesList.appendChild(li);
+}
+function createProfile() {
+        var nom = document.getElementById("nom").value;
+        var prenom = document.getElementById("prenom").value;
+        var email = document.getElementById("email").value;
+        var motDePasse = document.getElementById("mot_de_passe").value;
+        var dateDeNaissance = document.getElementById("date_de_naissance").value;
+        var genre = document.getElementById("genre").value;
+        var bio = document.getElementById("bio").value;
+        var ville = document.getElementById("ville").value;
+
+        // Construction du message de confirmation
+        var confirmationMessage = "Votre profil a été créé avec succès !\n\n";
+        confirmationMessage += "Nom : " + nom + "\n";
+        confirmationMessage += "Prénom : " + prenom + "\n";
+        confirmationMessage += "Email : " + email + "\n";
+        confirmationMessage += "Date de naissance : " + dateDeNaissance + "\n";
+        confirmationMessage += "Genre : " + genre + "\n";
+        confirmationMessage += "Bio : " + bio + "\n";
+        confirmationMessage += "Ville : " + ville;
+
+        // Stockage du message dans localStorage
+        localStorage.setItem("confirmationMessage", confirmationMessage);
+
+
+        window.location.href = "#starlove";
+        
+        // Empêcher le formulaire de se soumettre normalement
+        return false;
+    }
+   
+    
+
+
+</script>
+
+</body>
+</html>
