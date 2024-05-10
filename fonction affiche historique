@@ -1,0 +1,17 @@
+function afficherHistorique(destinataire) {
+    // Vérifier si l'historique des messages pour ce destinataire existe
+    if (historiqueMessages[destinataire]) {
+        var historiqueHTML = "<h3>Historique des messages avec " + destinataire + " :</h3>";
+        historiqueHTML += "<ul>";
+        historiqueMessages[destinataire].forEach(function(message) {
+            historiqueHTML += "<li>" + message + "</li>";
+        });
+        historiqueHTML += "</ul>";
+
+        // Afficher l'historique des messages dans l'élément HTML approprié
+        document.getElementById("historique_messages").innerHTML = historiqueHTML;
+    } else {
+        // Effacer l'historique des messages s'il n'y a pas de messages pour ce destinataire
+        document.getElementById("historique_messages").innerHTML = "";
+    }
+}
