@@ -1,0 +1,24 @@
+function addLikedProfile(profile) {
+    // Ajouter le profil aimé à la liste des profils aimés
+    var likedProfilesList = document.getElementById("liked_profiles_list");
+    var li = document.createElement("li");
+
+    // Créer un lien pour discuter avec la personne aimée
+    var link = document.createElement("a");
+    link.textContent = profile.name;
+    link.href = "#"; // Mettez "#" pour que le lien n'ait pas d'action par défaut
+
+    // Ajouter un gestionnaire d'événement pour ouvrir la section d'interaction avec ce profil
+    link.onclick = function() {
+        // Remplir automatiquement le champ destinataire avec le nom du profil sélectionné
+        document.getElementById("destinataire").value = profile.name;
+        // Afficher la section d'interaction avec le profil
+        openTab(event, 'interagir');
+    };
+
+    // Ajouter le lien à l'élément de liste
+    li.appendChild(link);
+
+    // Ajouter l'élément de liste à la liste des profils aimés
+    likedProfilesList.appendChild(li);
+}
